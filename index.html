@@ -13,6 +13,8 @@
             --white: #ffffff;
         }
 
+        * { box-sizing: border-box; }
+
         body {
             margin: 0;
             padding: 0;
@@ -28,7 +30,7 @@
             position: relative;
             width: 95vw;
             max-width: 1000px;
-            height: 90vh; /* Altura para escritorio */
+            height: 90vh;
             background: var(--white);
             border-radius: 20px;
             box-shadow: 0 15px 40px rgba(201, 24, 74, 0.3);
@@ -37,7 +39,7 @@
             flex-direction: column;
         }
 
-        /* Contenido Interior */
+        /* ── Contenido revelado ── */
         .reveal-content {
             display: flex;
             flex-direction: row;
@@ -54,33 +56,39 @@
             transform: scale(1);
         }
 
-        .message-side, .video-side {
+        /* ── Columna mensaje ── */
+        .message-side {
             flex: 1;
-            padding: 30px;
+            padding: 30px 30px 30px 30px;
             display: flex;
             flex-direction: column;
-            justify-content: flex-start; /* Alineado arriba para que no se corte el título */
+            justify-content: flex-start;
             align-items: center;
-            overflow-y: auto; /* Permite scroll individual si el texto es largo */
-        }
-
-        .message-side {
+            overflow-y: auto;
             background-color: var(--pink-light);
             color: var(--red-dark);
             border-right: 2px dashed var(--red-main);
         }
 
         .message-text {
-            font-size: 1.1rem;
-            line-height: 1.5;
+            font-size: 1.05rem;
+            line-height: 1.6;
             text-align: center;
             font-style: italic;
             white-space: pre-line;
         }
 
+        /* ── Columna video ── */
         .video-side {
+            flex: 1;
+            padding: 24px 24px 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
             background-color: var(--red-main);
             color: white;
+            overflow-y: auto;
         }
 
         .video-wrapper {
@@ -97,7 +105,35 @@
             display: block;
         }
 
-        /* Capas del Pastel */
+        /* ── Botones Play / Pausa  →  bajo el video, pegados a él ── */
+        .video-btns {
+            display: flex;
+            gap: 10px;
+            margin-top: 14px;
+            width: 100%;
+            max-width: 400px;
+            justify-content: center;
+        }
+
+        .video-btns button {
+            flex: 1;
+            padding: 10px 0;
+            font-size: 1rem;
+            font-weight: bold;
+            color: var(--red-dark);
+            background-color: white;
+            border: 2px solid var(--red-dark);
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .video-btns button:hover {
+            background-color: var(--red-dark);
+            color: white;
+        }
+
+        /* ── Capas del Pastel ── */
         .cake-layer {
             position: absolute;
             top: 0;
@@ -111,58 +147,95 @@
             z-index: 10;
         }
 
-        .cake-left { left: 0; border-right: 1px solid var(--pink-light); }
-        .cake-right { right: 0; border-left: 1px solid var(--pink-light); }
+        .cake-left  { left: 0;  border-right: 1px solid var(--pink-light); }
+        .cake-right { right: 0; border-left:  1px solid var(--pink-light); }
 
         .cake-graphic { font-size: 100px; }
 
-        .scene-container.open .cake-left { transform: translateX(-100%); }
-        .scene-container.open .cake-right { transform: translateX(100%); }
+        .scene-container.open .cake-left  { transform: translateX(-100%); }
+        .scene-container.open .cake-right { transform: translateX(100%);  }
 
-        /* Controles */
-        .main-controls {
+        /* ── Botón ABRIR  →  centrado sobre el pastel ── */
+        .open-btn-wrapper {
             position: absolute;
-            bottom: 20px;
+            /* Centra horizontal y verticalmente dentro del contenedor */
+            top: 50%;
             left: 50%;
-            transform: translateX(-50%);
+            transform: translate(-50%, -50%);
             z-index: 20;
-        }
-
-        .video-btns {
-            margin-top: 15px;
             display: flex;
-            gap: 10px;
+            flex-direction: column;
+            align-items: center;
+            gap: 0;
+            pointer-events: none; /* el wrapper no bloquea clics fuera */
         }
 
-        button {
-            padding: 10px 20px;
-            font-size: 1rem;
+        #openBtn {
+            pointer-events: all;
+            padding: 14px 32px;
+            font-size: 1.1rem;
             font-weight: bold;
             color: white;
             background-color: var(--red-dark);
             border: none;
-            border-radius: 25px;
+            border-radius: 30px;
             cursor: pointer;
-            transition: 0.3s;
+            box-shadow: 0 6px 20px rgba(201,24,74,0.45);
+            transition: transform 0.2s, box-shadow 0.2s;
+            animation: pulse 2s ease-in-out infinite;
         }
 
-        /* AJUSTES CRÍTICOS PARA MÓVILES */
+        #openBtn:hover {
+            transform: scale(1.06);
+            box-shadow: 0 8px 24px rgba(201,24,74,0.6);
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 6px 20px rgba(201,24,74,0.45); }
+            50%       { box-shadow: 0 6px 28px rgba(201,24,74,0.75); }
+        }
+
+        /* ── Botón CERRAR  →  esquina superior derecha ── */
+        #closeBtn {
+            position: absolute;
+            top: 14px;
+            right: 16px;
+            z-index: 20;
+            padding: 8px 18px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: var(--red-dark);
+            background: white;
+            border: 2px solid var(--red-dark);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        #closeBtn:hover {
+            background: var(--red-dark);
+            color: white;
+        }
+
+        .hidden { display: none !important; }
+
+        /* ── MÓVILES ── */
         @media (max-width: 768px) {
             .scene-container {
-                height: 95vh; /* Ocupa casi toda la pantalla en móvil */
+                height: 95vh;
             }
 
             .reveal-content {
-                flex-direction: column; /* Apila mensaje sobre video */
-                overflow-y: auto; /* Permite scroll si el contenido es muy alto */
+                flex-direction: column;
+                overflow-y: auto;
             }
 
-            .message-side, .video-side {
-                flex: none; /* Evita que se compriman */
+            .message-side,
+            .video-side {
+                flex: none;
                 width: 100%;
-                box-sizing: border-box;
-                padding: 20px;
-                min-height: 50%; /* Cada sección toma al menos la mitad */
+                padding: 18px 16px;
+                min-height: auto;
             }
 
             .message-side {
@@ -170,19 +243,19 @@
                 border-bottom: 2px dashed var(--red-main);
             }
 
-            .message-text {
-                font-size: 0.9rem;
-            }
+            .message-text { font-size: 0.88rem; line-height: 1.55; }
 
-            h2 {
-                font-size: 1.2rem;
-                margin-top: 0; /* Asegura que el título sea lo primero visible */
-            }
+            h2 { font-size: 1.1rem; margin-top: 0; margin-bottom: 10px; }
 
             .cake-graphic { font-size: 60px; }
 
-            .video-wrapper {
-                max-width: 100%;
+            .video-wrapper { max-width: 100%; }
+
+            .video-btns { max-width: 100%; }
+
+            #openBtn {
+                padding: 13px 26px;
+                font-size: 1rem;
             }
         }
     </style>
@@ -192,7 +265,8 @@
     <audio id="openSound" src="https://assets.mixkit.co/active_storage/sfx/2019/2019-preview.mp3"></audio>
 
     <div class="scene-container" id="scene">
-        
+
+        <!-- Pastel -->
         <div class="cake-layer cake-left">
             <span class="cake-graphic">🎂</span>
         </div>
@@ -200,20 +274,22 @@
             <span class="cake-graphic">🎂</span>
         </div>
 
+        <!-- Contenido -->
         <div class="reveal-content" id="content">
+
             <div class="message-side">
                 <h2>❤️ Feliz cumpleaños amor mío</h2>
                 <div class="message-text">
-                    Dicen que cumplir años no es solo sumar tiempo, sino darte cuenta de todo lo que ya superaste, de lo fuerte que eres y serás sin darte cuenta de lo lejos que puedas llegar incluso cuando pueden existir dudas en el camino.
+Dicen que cumplir años no es solo sumar tiempo, sino darte cuenta de todo lo que ya superaste, de lo fuerte que eres y serás sin darte cuenta de lo lejos que puedas llegar incluso cuando pueden existir dudas en el camino.
 
-                    Hoy celebramos un año más de tu vida, donde si hay caídas, pero sobretodo logros cada paso que te trajo hasta aquí tiene un porque no lo olvides.
+Hoy celebramos un año más de tu vida, donde si hay caídas, pero sobretodo logros cada paso que te trajo hasta aquí tiene un porque no lo olvides.
 
-                    Con una gran alegría en el corazón te deseo lo mejor, serás más fuerte, más alegre, más guerrera porque todavía hay una gran cantidad de sueños por cumplir he tenido la oportunidad de acercarme un poco más a ti y en tu día especial puede decir que espero sean muchos años más juntos. 
+Con una gran alegría en el corazón te deseo lo mejor, serás más fuerte, más alegre, más guerrera porque todavía hay una gran cantidad de sueños por cumplir he tenido la oportunidad de acercarme un poco más a ti y en tu día especial puede decir que espero sean muchos años más juntos.
 
-                    Mientras tanto sonrie pues quiero ver el sol brillar y en ti pensar 🍰🎂❤️
+Mientras tanto sonrie pues quiero ver el sol brillar y en ti pensar 🍰🎂❤️
                 </div>
             </div>
-            
+
             <div class="video-side">
                 <h2>Nuestros Momentos</h2>
                 <div class="video-wrapper">
@@ -221,33 +297,37 @@
                         <source src="video_cumple.mp4" type="video/mp4">
                     </video>
                 </div>
+                <!-- Play / Pausa: justo debajo del video, bien delimitados -->
                 <div class="video-btns">
                     <button onclick="playVideo()">▶️ Play</button>
                     <button onclick="pauseVideo()">⏸️ Pausa</button>
                 </div>
             </div>
+
         </div>
 
-        <div class="main-controls">
+        <!-- Botón abrir: flotante centrado sobre el pastel -->
+        <div class="open-btn-wrapper">
             <button id="openBtn">Abrir tu sorpresa 🎁</button>
-            <button id="closeBtn" class="hidden">Cerrar</button>
         </div>
+
+        <!-- Botón cerrar: esquina superior derecha, siempre visible -->
+        <button id="closeBtn" class="hidden">✕ Cerrar</button>
+
     </div>
 
     <script>
-        const scene = document.getElementById('scene');
-        const content = document.getElementById('content');
-        const openBtn = document.getElementById('openBtn');
+        const scene    = document.getElementById('scene');
+        const content  = document.getElementById('content');
+        const openBtn  = document.getElementById('openBtn');
         const closeBtn = document.getElementById('closeBtn');
-        const video = document.getElementById('birthdayVideo');
+        const video    = document.getElementById('birthdayVideo');
         const openSound = document.getElementById('openSound');
 
         openBtn.addEventListener('click', () => {
             openSound.play();
             scene.classList.add('open');
-            setTimeout(() => {
-                content.classList.add('show');
-            }, 600);
+            setTimeout(() => content.classList.add('show'), 600);
             openBtn.classList.add('hidden');
             closeBtn.classList.remove('hidden');
         });
@@ -255,15 +335,14 @@
         closeBtn.addEventListener('click', () => {
             content.classList.remove('show');
             video.pause();
-            setTimeout(() => {
-                scene.classList.remove('open');
-            }, 400);
+            setTimeout(() => scene.classList.remove('open'), 400);
             closeBtn.classList.add('hidden');
             openBtn.classList.remove('hidden');
         });
 
-        function playVideo() { video.play(); }
+        function playVideo()  { video.play();  }
         function pauseVideo() { video.pause(); }
     </script>
+
 </body>
 </html>
