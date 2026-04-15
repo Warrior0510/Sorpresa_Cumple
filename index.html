@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feliz Cumpleaños Amor</title>
+    <style>
+        :root {
+            --red-dark: #c9184a;
+            --red-main: #ff4d6d;
+            --pink-light: #ffb3c1;
+            --pink-bg: #fff0f3;
+            --white: #ffffff;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: var(--pink-bg);
+            font-family: 'Segoe UI', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .scene-container {
+            position: relative;
+            width: 95vw;
+            max-width: 1000px;
+            height: 90vh;
+            max-height: 700px;
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(201, 24, 74, 0.3);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Contenido Interior (Mensaje y Video) */
+        .reveal-content {
+            display: flex;
+            flex-direction: row; /* Default para PC */
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transform: scale(0.95);
+            transition: all 0.8s ease-out;
+            z-index: 1;
+        }
+
+        .reveal-content.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .message-side, .video-side {
+            flex: 1;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow-y: auto;
+        }
+
+        .message-side {
+            background-color: var(--pink-light);
+            color: var(--red-dark);
+            border-right: 2px dashed var(--red-main);
+        }
+
+        .message-text {
+            font-size: 1.1rem;
+            line-height: 1.5;
+            text-align: center;
+            font-style: italic;
+            white-space: pre-line; /* Respeta los saltos de línea */
+        }
+
+        .video-side {
+            background-color: var(--red-main);
+            color: white;
+        }
+
+        .video-wrapper {
+            width: 100%;
+            max-width: 450px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            background: black;
+            position: relative;
+        }
+
+        video {
+            width: 100%;
+            display: block;
+        }
+
+        /* Animación del Pastel */
+        .cake-layer {
+            position: absolute;
+            top: 0;
+            width: 50.5%; /* Un poco más del 50% para evitar la línea blanca en medio */
+            height: 100%;
+            background-color: var(--pink-bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 1.5s cubic-bezier(0.7, 0, 0.3, 1);
+            z-index: 10;
+        }
+
+        .cake-left { left: 0; border-right: 1px solid var(--pink-light); }
+        .cake-right { right: 0; border-left: 1px solid var(--pink-light); }
+
+        .cake-graphic { font-size: 120px; }
+
+        .scene-container.open .cake-left { transform: translateX(-100%); }
+        .scene-container.open .cake-right { transform: translateX(100%); }
+
+        /* Controles */
+        .main-controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 20;
+            display: flex;
+            gap: 10px;
+        }
+
+        .video-btns {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            padding: 12px 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            color: white;
+            background-color: var(--red-dark);
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            transition: 0.3s;
+        }
+
+        button:hover { background-color: #a0123a; transform: scale(1.05); }
+        .hidden { display: none; }
+
+        /* RESPONSIVO PARA MÓVILES */
+        @media (max-width: 768px) {
+            .reveal-content {
+                flex-direction: column;
+            }
+            .message-side {
+                border-right: none;
+                border-bottom: 2px dashed var(--red-main);
+                padding: 20px;
+            }
+            .message-text { font-size: 0.95rem; }
+            .cake-graphic { font-size: 80px; }
+            .video-side { padding: 20px; }
+            h2 { font-size: 1.4rem; margin: 10px 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="openSound" src="https://assets.mixkit.co/active_storage/sfx/2019/2019-preview.mp3"></audio>
+
+    <div class="scene-container" id="scene">
+        
+        <div class="cake-layer cake-left">
+            <span class="cake-graphic">🎂</span>
+        </div>
+        <div class="cake-layer cake-right">
+            <span class="cake-graphic">🎂</span>
+        </div>
+
+        <div class="reveal-content" id="content">
+            <div class="message-side">
+                <h2>❤️ Para mi amor en su dia especial.
+                </h2>
+                <div class="message-text">
+                    Feliz cumpleaños amor mío.
+
+                    Dicen que cumplir años no es solo sumar tiempo, sino darte cuenta de todo lo que ya superaste, de lo fuerte que eres y serás sin darte cuenta de lo lejos que puedas llegar incluso cuando pueden existir dudas en el camino.
+
+                    Hoy celebramos un año más de tu vida, donde si hay caídas, pero sobretodo logros cada paso que te trajo hasta aquí tiene un porque no lo olvides.
+
+                    Con una gran alegría en el corazón te deseo lo mejor, serás más fuerte, más alegre, más guerrera porque todavía hay una gran cantidad de sueños por cumplir he tenido la oportunidad de acercarme un poco más a ti y en tu día especial puede decir que espero sean muchos años más juntos. 
+
+                    Mientras tanto sonrie pues quiero ver el sol brillar y en ti pensar 🍰🎂❤️
+                </div>
+            </div>
+            
+            <div class="video-side">
+                <h2>Nuestros Momentos</h2>
+                <div class="video-wrapper">
+                    <video id="birthdayVideo">
+                        <source src="video_cumple.mp4" type="video/mp4">
+                        Tu navegador no soporta video.
+                    </video>
+                </div>
+                <div class="video-btns">
+                    <button onclick="playVideo()">▶️ Play</button>
+                    <button onclick="pauseVideo()">⏸️ Pausa</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-controls">
+            <button id="openBtn">Abrir tu sorpresa 🎁</button>
+            <button id="closeBtn" class="hidden">Cerrar</button>
+        </div>
+    </div>
+
+    <script>
+        const scene = document.getElementById('scene');
+        const content = document.getElementById('content');
+        const openBtn = document.getElementById('openBtn');
+        const closeBtn = document.getElementById('closeBtn');
+        const video = document.getElementById('birthdayVideo');
+        const openSound = document.getElementById('openSound');
+
+        // Función Abrir
+        openBtn.addEventListener('click', () => {
+            // 1. Sonido de apertura
+            openSound.play();
+            
+            // 2. Animación pastel
+            scene.classList.add('open');
+            
+            // 3. Mostrar contenido con retraso
+            setTimeout(() => {
+                content.classList.add('show');
+            }, 600);
+            
+            openBtn.classList.add('hidden');
+            closeBtn.classList.remove('hidden');
+        });
+
+        // Función Cerrar
+        closeBtn.addEventListener('click', () => {
+            content.classList.remove('show');
+            video.pause();
+            
+            setTimeout(() => {
+                scene.classList.remove('open');
+            }, 400);
+
+            closeBtn.classList.add('hidden');
+            openBtn.classList.remove('hidden');
+        });
+
+        // Controles de Video
+        function playVideo() {
+            video.play();
+        }
+
+        function pauseVideo() {
+            video.pause();
+        }
+    </script>
+</body>
+</html>
